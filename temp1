@@ -1,0 +1,26 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder,OneHotEncoder,StandardScaler
+import warnings
+warnings.simplefilter("ignore")
+import matplotlib.pyplot as plt
+data=pd.read_csv(r"C:\Users\SEFA\PycharmProjects\pythonProject\Yapay Zeka Arşiv\Churn_Modelling.csv")
+
+X=data.iloc[:,3:13]
+
+#preprocessing
+
+X["Geography"].nunique()
+
+geo=X.iloc[:,1:2]
+geo=LabelEncoder().fit_transform(geo).reshape((-1,1))
+
+geo_l=OneHotEncoder().fit_transform(geo).toarray()
+
+geo_df=pd.DataFrame(geo_l,columns=["France","Germany","Spain"])
+
+X=X.drop("Geography",axis=1)
+X=pd.concat([geo_df,X],axis=1)
+
+Y=data.loc[:,"Exited"].values.reshape(-1,1)
+
+X["Gender"]=LabelEncoder().fit_transform(X["Gender"])
